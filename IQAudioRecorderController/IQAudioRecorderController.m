@@ -116,7 +116,7 @@
     self.viewControllers = @[_internalController];
     
     
-    self.navigationBar.tintColor = (self.barStyle ? self.barStyle : [UIColor whiteColor]);
+    self.navigationBar.tintColor = (self.barTintColor ? self.barTintColor : [UIColor whiteColor]);
     self.navigationBar.translucent = (self.barTranslucent ? self.barTranslucent : YES);
     self.navigationBar.barStyle = (self.barStyle ? self.barStyle : UIBarStyleBlackTranslucent);
     
