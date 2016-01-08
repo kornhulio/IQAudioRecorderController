@@ -86,6 +86,7 @@
     //Private variables
     NSString *_oldSessionCategory;
 
+    UIActivityIndicatorView *activityIndicator;
 }
 
 @property (nonatomic, weak) id<IQAudioRecorderControllerDelegate> delegate;
@@ -106,7 +107,6 @@
 @implementation IQAudioRecorderController
 {
     IQInternalAudioRecorderController *_internalController;
-    UIActivityIndicatorView *activityIndicator;
 }
 @synthesize delegate = _delegate;
 
