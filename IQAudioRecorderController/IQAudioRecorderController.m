@@ -300,6 +300,7 @@
     } else if(self.filePath){
       _playingFilePath = self.filePath;
     }
+    _playButton.enabled = YES;
     [self play];
     if(activityIndicator) [activityIndicator stopAnimating];
   }
