@@ -205,14 +205,15 @@
           [self setToolbarItems:@[_playButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:NO];
           _playButton.enabled = NO;
           _trashButton.enabled = NO;
-          UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-          [self.view addSubview:activityIndicator];
-          [activityIndicator startAnimating];
         } else {
           _playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction:)];
           _pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pauseAction:)];
           [self setToolbarItems:@[_flexItem1, _playButton, _flexItem2] animated:NO];
-          _playButton.enabled = YES;
+          _playButton.enabled = NO;
+          activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+          activityIndicator.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
+          [self.view addSubview:activityIndicator];
+          [activityIndicator startAnimating];
         }
     }
     
