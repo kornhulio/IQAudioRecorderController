@@ -487,7 +487,7 @@
     {
       if(self.readonly){
         [self setToolbarItems:@[_flexItem1, _pauseButton, _flexItem2] animated:YES];
-        [self showNavigationButton:YES];
+        //[self showNavigationButton:YES];
       } else {
         [self setToolbarItems:@[_pauseButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:YES];
         [self showNavigationButton:NO];
@@ -521,7 +521,7 @@
     {
       if(self.readonly){
         [self setToolbarItems:@[_flexItem1, _playButton, _flexItem2] animated:YES];
-        [self showNavigationButton:YES];
+        //[self showNavigationButton:YES];
       } else {
         [self setToolbarItems:@[_playButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:YES];
         [self showNavigationButton:YES];
@@ -538,6 +538,8 @@
         _audioPlayer.delegate = nil;
         [_audioPlayer stop];
         _audioPlayer = nil;
+      } else {
+        [_audioPlayer stop];
       }
     }
 
