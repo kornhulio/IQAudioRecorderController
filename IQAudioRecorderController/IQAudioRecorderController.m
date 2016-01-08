@@ -95,6 +95,7 @@
 @property (nonatomic, weak) UIColor *playingTintColor;
 @property (nonatomic, assign) BOOL readonly;
 @property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, strong) NSString *remoteUrl;
 @property (nonatomic, strong) NSString *customTitle;
 
 @end
@@ -119,6 +120,7 @@
     _internalController.readonly = self.readonly;
     _internalController.filePath = self.filePath;
     _internalController.customTitle = self.customTitle;
+    _internalController.remoteUrl = self.remoteUrl;
     
     self.viewControllers = @[_internalController];
     
@@ -185,8 +187,16 @@
 
     //Unique recording URL
     NSString *fileName = [[NSProcessInfo processInfo] globallyUniqueString];
-    if(self.readonly && self.filePath){
-      _recordingFilePath = self.filePath;
+    if(self.readonly){
+      if(self.remoteUrl){
+        NSData *audioData = [NSData dataWithContentsOfURL:[NSURL URLWithString:remoteUrl]];
+        NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *filePath = [NSString stringWithFormat:@"%@/tmp.m4a", docDirPath ];
+        [audioData writeToFile:filePath atomically:YES];
+        _recordingFilePath = filePath;
+      } else if(self.filePath){
+        _recordingFilePath = self.filePath;
+      }
     } else {
       _recordingFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a",fileName]];
     }
@@ -525,12 +535,12 @@
         [playProgressDisplayLink invalidate];
         playProgressDisplayLink = nil;
         self.navigationItem.titleView = nil;
+        _audioPlayer.delegate = nil;
+        [_audioPlayer stop];
+        _audioPlayer = nil;
       }
     }
 
-    _audioPlayer.delegate = nil;
-    [_audioPlayer stop];
-    _audioPlayer = nil;
     
     [[AVAudioSession sharedInstance] setCategory:_oldSessionCategory error:nil];
 }

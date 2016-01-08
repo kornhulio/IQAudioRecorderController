@@ -48,5 +48,6 @@
 @property (nonatomic, strong) NSString *customTitle;
 @property (nonatomic, assign) BOOL readonly;
 @property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, strong) NSString *remoteUrl;
 
 @end
