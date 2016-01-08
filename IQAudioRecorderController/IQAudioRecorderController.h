@@ -41,7 +41,7 @@
 @property (nonatomic, strong) UIColor *recordingTintColor;
 @property (nonatomic, strong) UIColor *playingTintColor;
 @property (nonatomic, strong) UIColor *navigationTintColor;
-@property (nonatomic, strong) UIColor barTintColor;
+@property (nonatomic, strong) UIColor *barTintColor;
 @property (nonatomic, assign) BOOL barTranslucent;
 @property (nonatomic, assign) int barStyle;
 
