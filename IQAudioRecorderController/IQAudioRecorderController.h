@@ -43,6 +43,6 @@
 @property (nonatomic, strong) UIColor *navigationTintColor;
 @property (nonatomic, strong) UIColor barTintColor;
 @property (nonatomic, assign) BOOL barTranslucent;
-@property (nonatomic, assigb) int barStyle;
+@property (nonatomic, assign) int barStyle;
 
 @end
