@@ -189,7 +189,7 @@
     NSString *fileName = [[NSProcessInfo processInfo] globallyUniqueString];
     if(self.readonly){
       if(self.remoteUrl){
-        NSData *audioData = [NSData dataWithContentsOfURL:[NSURL URLWithString:remoteUrl]];
+        NSData *audioData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.remoteUrl]];
         NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *filePath = [NSString stringWithFormat:@"%@/tmp.m4a", docDirPath ];
         [audioData writeToFile:filePath atomically:YES];
