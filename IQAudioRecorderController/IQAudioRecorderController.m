@@ -84,6 +84,7 @@
     
     //Private variables
     NSString *_oldSessionCategory;
+
 }
 
 @property (nonatomic, weak) id<IQAudioRecorderControllerDelegate> delegate;
@@ -92,6 +93,8 @@
 @property (nonatomic, weak) UIColor *normalTintColor;
 @property (nonatomic, weak) UIColor *recordingTintColor;
 @property (nonatomic, weak) UIColor *playingTintColor;
+@property (nonatomic, assign) BOOL readonly;
+@property (nonatomic, strong) NSString *filePath;
 
 @end
 
@@ -112,6 +115,8 @@
     _internalController.normalTintColor = self.normalTintColor;
     _internalController.recordingTintColor = self.recordingTintColor;
     _internalController.playingTintColor = self.playingTintColor;
+    _internalController.readonly = self.readonly;
+    _internalController.filePath = self.filePath;
     
     self.viewControllers = @[_internalController];
     
