@@ -180,14 +180,20 @@
         _flexItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         _flexItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         
-        _recordButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"audio_record"] style:UIBarButtonItemStylePlain target:self action:@selector(recordingButtonAction:)];
-        _playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction:)];
-        _pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pauseAction:)];
-        _trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAction:)];
-        [self setToolbarItems:@[_playButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:NO];
-
-        _playButton.enabled = NO;
-        _trashButton.enabled = NO;
+        if(!self.readonly){
+          _recordButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"audio_record"] style:UIBarButtonItemStylePlain target:self action:@selector(recordingButtonAction:)];
+          _playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction:)];
+          _pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pauseAction:)];
+          _trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAction:)];
+          [self setToolbarItems:@[_playButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:NO];
+          _playButton.enabled = NO;
+          _trashButton.enabled = NO;
+        } else {
+          _playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction:)];
+          _pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pauseAction:)];
+          [self setToolbarItems:@[_flexItem1, _playButton, _flexItem2] animated:NO];
+          _playButton.enabled = YES;
+        }
     }
     
     // Define the recorder setting
@@ -380,13 +386,15 @@
 
 -(void)doneAction:(UIBarButtonItem*)item
 {
+  if(!self.readonly){
     if ([self.delegate respondsToSelector:@selector(audioRecorderController:didFinishWithAudioAtPath:)])
     {
         IQAudioRecorderController *controller = (IQAudioRecorderController*)[self navigationController];
         [self.delegate audioRecorderController:controller didFinishWithAudioAtPath:_recordingFilePath];
     }
+  }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)recordingButtonAction:(UIBarButtonItem *)item
@@ -446,10 +454,15 @@
     
     //UI Update
     {
+      if(self.readonly){
+        [self setToolbarItems:@[_flexItem1, _pauseButton, _flexItem2] animated:YES];
+        [self showNavigationButton:YES];
+      } else {
         [self setToolbarItems:@[_pauseButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:YES];
         [self showNavigationButton:NO];
         _recordButton.enabled = NO;
         _trashButton.enabled = NO;
+      }
     }
     
     //Start regular update
@@ -475,10 +488,15 @@
 {
     //UI Update
     {
+      if(self.readonly){
+        [self setToolbarItems:@[_flexItem1, _playButton, _flexItem2] animated:YES];
+        [self showNavigationButton:YES];
+      } else {
         [self setToolbarItems:@[_playButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:YES];
         [self showNavigationButton:YES];
         _recordButton.enabled = YES;
         _trashButton.enabled = YES;
+      }
     }
     
     {
