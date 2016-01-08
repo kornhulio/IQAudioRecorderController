@@ -95,6 +95,7 @@
 @property (nonatomic, weak) UIColor *playingTintColor;
 @property (nonatomic, assign) BOOL readonly;
 @property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, strong) NSString *barTitle;
 
 @end
 
@@ -117,6 +118,7 @@
     _internalController.playingTintColor = self.playingTintColor;
     _internalController.readonly = self.readonly;
     _internalController.filePath = self.filePath;
+    _internalController.barTitle = self.barTitle;
     
     self.viewControllers = @[_internalController];
     
@@ -168,7 +170,7 @@
 {
     [super viewDidLoad];
 
-    _navigationTitle = @"Audio Recorder";
+    _navigationTitle = (self.barTitle ? self.barTitle : @"Audio Recorder");
     _normalTintColor = (self.normalTintColor ? self.normalTintColor : [UIColor whiteColor]);
     _recordingTintColor = (self.recordingTintColor ? self.recordingTintColor : [UIColor colorWithRed:0.0/255.0 green:128.0/255.0 blue:255.0/255.0 alpha:1.0]);
     _playingTintColor = (self.playingTintColor ? self.playingTintColor : [UIColor colorWithRed:255.0/255.0 green:64.0/255.0 blue:64.0/255.0 alpha:1.0]);
@@ -281,6 +283,9 @@
     [super viewWillAppear:animated];
     
     [self startUpdatingMeter];
+    if(self.readonly){
+      [self play];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -452,6 +457,9 @@
 
 - (void)playAction:(UIBarButtonItem *)item
 {
+  [self play];
+}
+- (void)play{
     _oldSessionCategory = [[AVAudioSession sharedInstance] category];
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     

@@ -44,6 +44,7 @@
 @property (nonatomic, strong) UIColor *barTintColor;
 @property (nonatomic, assign) BOOL barTranslucent;
 @property (nonatomic, assign) int barStyle;
+@property (nonatomic, strong) NSString *barTitle;
 @property (nonatomic, assign) BOOL readonly;
 @property (nonatomic, strong) NSString *filePath;
 
