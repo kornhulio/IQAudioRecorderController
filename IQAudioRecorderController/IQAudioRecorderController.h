@@ -45,5 +45,6 @@
 @property (nonatomic, assign) BOOL barTranslucent;
 @property (nonatomic, assign) int barStyle;
 @property (nonatomic, assign) BOOL readonly;
+@property (nonatomic, strong) NSString *fileUrl;
 
 @end

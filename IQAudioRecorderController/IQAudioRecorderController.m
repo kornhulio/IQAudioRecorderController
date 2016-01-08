@@ -174,7 +174,11 @@
 
     //Unique recording URL
     NSString *fileName = [[NSProcessInfo processInfo] globallyUniqueString];
-    _recordingFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a",fileName]];
+    if(self.readonly && self.filePath){
+      _recordingFilePath = self.filePath;
+    } else {
+      _recordingFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a",fileName]];
+    }
 
     {
         _flexItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
