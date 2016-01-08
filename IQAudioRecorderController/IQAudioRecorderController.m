@@ -82,7 +82,6 @@
     UIBarButtonItem *_pauseButton;
     UIBarButtonItem *_recordButton;
     UIBarButtonItem *_trashButton;
-    UIBarButtonItem *_loadingButton;
     
     //Private variables
     NSString *_oldSessionCategory;
@@ -107,6 +106,7 @@
 @implementation IQAudioRecorderController
 {
     IQInternalAudioRecorderController *_internalController;
+    UIActivityIndicatorView *activityIndicator;
 }
 @synthesize delegate = _delegate;
 
@@ -205,11 +205,14 @@
           [self setToolbarItems:@[_playButton,_flexItem1, _recordButton,_flexItem2, _trashButton] animated:NO];
           _playButton.enabled = NO;
           _trashButton.enabled = NO;
+          UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+          [self.view addSubview:activityIndicator];
+          [activityIndicator startAnimating];
         } else {
           _playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playAction:)];
           _pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pauseAction:)];
-          _loadingButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"loading"] style:UIBarButtonItemStylePlain target:nil action:nil];
-          [self setToolbarItems:@[_flexItem1, _loadingButton, _flexItem2] animated:NO];
+          [self setToolbarItems:@[_flexItem1, _playButton, _flexItem2] animated:NO];
+          _playButton.enabled = YES;
         }
     }
     
@@ -296,11 +299,8 @@
     } else if(self.filePath){
       _playingFilePath = self.filePath;
     }
-
-    [self setToolbarItems:@[_flexItem1, _playButton, _flexItem2] animated:NO];
-    _playButton.enabled = YES;
-
     [self play];
+    if(activityIndicator) [activityIndicator stopAnimating];
   }
 }
 
