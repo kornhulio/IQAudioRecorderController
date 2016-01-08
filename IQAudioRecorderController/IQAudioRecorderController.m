@@ -477,10 +477,12 @@
     _oldSessionCategory = [[AVAudioSession sharedInstance] category];
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
-    _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:_recordingFilePath] error:nil];
-    _audioPlayer.delegate = self;
-    _audioPlayer.meteringEnabled = YES;
-    [_audioPlayer prepareToPlay];
+    if(!_audioPlayer){
+      _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:_recordingFilePath] error:nil];
+      _audioPlayer.delegate = self;
+      _audioPlayer.meteringEnabled = YES;
+      [_audioPlayer prepareToPlay];
+    }
     [_audioPlayer play];
     
     //UI Update
