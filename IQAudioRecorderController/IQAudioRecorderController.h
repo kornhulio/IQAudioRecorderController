@@ -41,10 +41,11 @@
 @property (nonatomic, strong) UIColor *recordingTintColor;
 @property (nonatomic, strong) UIColor *playingTintColor;
 @property (nonatomic, strong) UIColor *navigationTintColor;
-@property (nonatomic, strong) UIColor *barTintColor;
-@property (nonatomic, assign) BOOL barTranslucent;
-@property (nonatomic, assign) int barStyle;
-@property (nonatomic, strong) NSString *barTitle;
+@property (nonatomic, strong) UIColor *customTintColor;
+@property (nonatomic, strong) UIColor *customBarTintColor;
+@property (nonatomic, assign) BOOL customTranslucent;
+@property (nonatomic, assign) int customBarStyle;
+@property (nonatomic, strong) NSString *customTitle;
 @property (nonatomic, assign) BOOL readonly;
 @property (nonatomic, strong) NSString *filePath;
 

@@ -95,7 +95,7 @@
 @property (nonatomic, weak) UIColor *playingTintColor;
 @property (nonatomic, assign) BOOL readonly;
 @property (nonatomic, strong) NSString *filePath;
-@property (nonatomic, strong) NSString *barTitle;
+@property (nonatomic, strong) NSString *customTitle;
 
 @end
 
@@ -118,17 +118,21 @@
     _internalController.playingTintColor = self.playingTintColor;
     _internalController.readonly = self.readonly;
     _internalController.filePath = self.filePath;
-    _internalController.barTitle = self.barTitle;
+    _internalController.customTitle = self.customTitle;
     
     self.viewControllers = @[_internalController];
     
     
-    self.navigationBar.tintColor = (self.barTintColor ? self.barTintColor : [UIColor whiteColor]);
-    self.navigationBar.translucent = (self.barTranslucent ? self.barTranslucent : YES);
-    self.navigationBar.barStyle = (self.barStyle ? self.barStyle : UIBarStyleBlackTranslucent);
+    self.navigationBar.tintColor = (self.customTintColor ? self.customTintColor : [UIColor whiteColor]);
+    if(self.customBarTintColor){
+      self.navigationBar.barTintColor = self.customBarTintColor;
+    }
+    self.navigationBar.translucent = (self.customTranslucent ? self.customTranslucent : YES);
+    self.navigationBar.barStyle = (self.customBarStyle ? self.customBarStyle : UIBarStyleBlackTranslucent);
     
     self.toolbarHidden = NO;
     self.toolbar.tintColor = self.navigationBar.tintColor;
+    self.toolbar.barTintColor = self.navigationBar.barTintColor;
     self.toolbar.translucent = self.navigationBar.translucent;
     self.toolbar.barStyle = self.navigationBar.barStyle;
 }
@@ -170,7 +174,7 @@
 {
     [super viewDidLoad];
 
-    _navigationTitle = (self.barTitle ? self.barTitle : @"Audio Recorder");
+    _navigationTitle = (self.customTitle ? self.customTitle : @"Audio Recorder");
     _normalTintColor = (self.normalTintColor ? self.normalTintColor : [UIColor whiteColor]);
     _recordingTintColor = (self.recordingTintColor ? self.recordingTintColor : [UIColor colorWithRed:0.0/255.0 green:128.0/255.0 blue:255.0/255.0 alpha:1.0]);
     _playingTintColor = (self.playingTintColor ? self.playingTintColor : [UIColor colorWithRed:255.0/255.0 green:64.0/255.0 blue:64.0/255.0 alpha:1.0]);
@@ -226,7 +230,7 @@
 
     //Navigation Bar Settings
     {
-        self.navigationItem.title = @"Audio Recorder";
+        self.navigationItem.title = _navigationTitle;
         _cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)];
         self.navigationItem.leftBarButtonItem = _cancelButton;
         _doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)];
@@ -517,9 +521,11 @@
     }
     
     {
+      if(!self.readonly){
         [playProgressDisplayLink invalidate];
         playProgressDisplayLink = nil;
         self.navigationItem.titleView = nil;
+      }
     }
 
     _audioPlayer.delegate = nil;
