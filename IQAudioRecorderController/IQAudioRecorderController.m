@@ -213,7 +213,7 @@
     }
     
     // Define the recorder setting
-    if(!readonly){
+    if(!self.readonly){
         NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
         
         [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
