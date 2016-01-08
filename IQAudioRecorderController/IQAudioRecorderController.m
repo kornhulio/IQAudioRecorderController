@@ -68,6 +68,7 @@
     UILabel *_labelCurrentTime;
     UILabel *_labelRemainingTime;
     CADisplayLink *playProgressDisplayLink;
+    NSString *_playingFilePath;
 
     //Navigation Bar
     NSString *_navigationTitle;
@@ -187,17 +188,7 @@
 
     //Unique recording URL
     NSString *fileName = [[NSProcessInfo processInfo] globallyUniqueString];
-    if(self.readonly){
-      if(self.remoteUrl){
-        NSData *audioData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.remoteUrl]];
-        NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString *filePath = [NSString stringWithFormat:@"%@/tmp.m4a", docDirPath ];
-        [audioData writeToFile:filePath atomically:YES];
-        _recordingFilePath = filePath;
-      } else if(self.filePath){
-        _recordingFilePath = self.filePath;
-      }
-    } else {
+    if(!self.readonly){
       _recordingFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a",fileName]];
     }
 
@@ -222,7 +213,7 @@
     }
     
     // Define the recorder setting
-    {
+    if(!readonly){
         NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
         
         [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
@@ -292,14 +283,27 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+  [super viewDidAppear:animated];
+  if(self.readonly){
+    if(self.remoteUrl){
+      NSData *audioData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.remoteUrl]];
+      NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      NSString *filePath = [NSString stringWithFormat:@"%@/tmp.m4a", docDirPath ];
+      [audioData writeToFile:filePath atomically:YES];
+      _playingFilePath = filePath;
+    } else if(self.filePath){
+      _playingFilePath = self.filePath;
+    }
+    [self play];
+  }
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     [self startUpdatingMeter];
-    if(self.readonly){
-      [self play];
-    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -478,7 +482,11 @@
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
     if(!_audioPlayer){
-      _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:_recordingFilePath] error:nil];
+      if(readonly){
+        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:_playingFilePath] error:nil];
+      } else {
+        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:_recordingFilePath] error:nil];
+      }
       _audioPlayer.delegate = self;
       _audioPlayer.meteringEnabled = YES;
       [_audioPlayer prepareToPlay];
