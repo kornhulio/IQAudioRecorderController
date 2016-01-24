@@ -130,6 +130,7 @@
     self.navigationBar.tintColor = (self.customTintColor ? self.customTintColor : [UIColor whiteColor]);
     if(self.customBarTintColor){
       self.navigationBar.barTintColor = self.customBarTintColor;
+      self.navigationBar.backgroundColor = self.customBarTintColor;
     }
     self.navigationBar.translucent = (self.customTranslucent ? self.customTranslucent : YES);
     self.navigationBar.barStyle = (self.customBarStyle ? self.customBarStyle : UIBarStyleBlackTranslucent);
